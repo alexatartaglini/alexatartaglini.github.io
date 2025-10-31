@@ -1,5 +1,5 @@
 :root {
-  color-scheme: dark;
+  color-scheme: light dark;
   --bg: #21201e;
   --bg-alt: #2b2a27;
   --text: #f4f0e6;
@@ -8,15 +8,6 @@
   --accent-dark: #0f0f0f;
   --border: rgba(255, 255, 255, 0.08);
   --shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-  color-scheme: light;
-  --bg: #f8f7ff;
-  --bg-alt: #ffffff;
-  --text: #1c1c28;
-  --muted: #5c5c7a;
-  --accent: #6c63ff;
-  --accent-dark: #4b45c6;
-  --border: rgba(108, 99, 255, 0.2);
-  --shadow: 0 20px 60px rgba(37, 35, 90, 0.08);
   font-size: 16px;
 }
 
