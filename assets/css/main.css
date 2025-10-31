@@ -3,10 +3,10 @@
   --bg: #ebebeb;
   --bg-alt: #ebebeb;
   --text: #21201E;
-  --muted: #f8c95b;
-  --accent: #ef0000;
-  --accent-dark: #00ff5e;
-  --border: rgba(255, 255, 255, 0.08);
+  --muted: #21201E;
+  --accent: #ffffff;
+  --accent-dark: #000000;
+  --border: #21201E;
   --shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
   font-size: 16px;
 }
