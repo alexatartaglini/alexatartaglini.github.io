@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" role="img" aria-labelledby="title desc">
+  <title>Headshot placeholder</title>
+  <desc>Abstract gradient placeholder for a profile photo.</desc>
+  <defs>
+    <radialGradient id="gradient" cx="50%" cy="40%" r="70%">
+      <stop offset="0%" stop-color="#6c63ff" stop-opacity="0.85" />
+      <stop offset="60%" stop-color="#6c63ff" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#f8f7ff" stop-opacity="0.9" />
+    </radialGradient>
+  </defs>
+  <rect width="320" height="320" fill="url(#gradient)" rx="160" />
+  <g fill="#ffffff" opacity="0.85">
+    <circle cx="160" cy="124" r="60" />
+    <path d="M96 254c0-41.42 28.65-75 64-75s64 33.58 64 75c0 10.77-8.72 19-19.49 19H115.5C104.72 273 96 264.77 96 254Z" />
+  </g>
+</svg>
