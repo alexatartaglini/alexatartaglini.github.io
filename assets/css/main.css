@@ -1,9 +1,9 @@
 @font-face {
   font-family: 'AdelleMono';
   src:
-    url('assets/fonts/AdelleMonoFlex-Light.otf') format('opentype'),
-    url('assets/fonts/AdelleMonoFlex-Light.woff') format('woff'),
-    url('assets/fonts/AdelleMonoFlex-Light.woff2') format('woff2');
+    url('../fonts/AdelleMonoFlex-Light.otf') format('opentype'),
+    url('../fonts/AdelleMonoFlex-Light.woff') format('woff'),
+    url('../fonts/AdelleMonoFlex-Light.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
 }
@@ -233,7 +233,7 @@ main {
   align-self: stretch;
   height: 100%;
   min-height: 0;
-  padding: 2rem 1.75rem calc(2rem - 1px);
+  padding: 2rem 1.75rem calc(2rem - 2px);
   background: var(--bg-alt);
   border-radius: 0;
   border: 1px solid var(--border);
