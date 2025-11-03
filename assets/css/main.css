@@ -206,6 +206,19 @@ main {
   transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
+.animation-controls .scroll-down {
+  width: 48px;
+  height: 48px;
+  padding: 0;                 /* override the pill padding */
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+}
+
+.animation-controls .scroll-down svg {
+  display: block;
+}
+
 .animation-controls button[data-active="true"],
 .animation-controls button:hover,
 .animation-controls button:focus {

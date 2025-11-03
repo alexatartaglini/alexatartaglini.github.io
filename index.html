@@ -64,11 +64,15 @@
           neuroscience to understand what modern models learn, why they succeed, and how we can align them with human goals.
         </p>
       </div>
-      <div class="animation-controls" role="group" aria-label="Animation controls">
-        <button type="button" data-control="play" aria-pressed="false">Pause animation</button>
-        <button type="button" data-mode="flow" data-active="true">Flow</button>
-        <button type="button" data-mode="orbit" data-active="false">Orbit</button>
-        <button type="button" data-mode="pulse" data-active="false">Pulse</button>
+      <div class="animation-controls" role="group" aria-label="Scroll controls">
+        <button type="button" class="scroll-down" aria-label="Scroll to content" title="Scroll to content">
+          <!-- Down arrow SVG -->
+          <svg id='Arrows Button Down' width='24' height='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><rect width='24' height='24' stroke='none' fill='#000000' opacity='0'/>
+            <g transform="matrix(1.54 0 0 1.54 12 12)" >
+            <path style="stroke: rgb(0,0,0); stroke-width: 1; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" transform=" translate(-7, -7)" d="M 0.5 3.85 L 6.65 10 C 6.740733331544497 10.096677225793572 6.867414090340244 10.151518645886863 7 10.151518645886863 C 7.132585909659756 10.151518645886863 7.259266668455504 10.096677225793572 7.3500000000000005 10 L 13.5 3.85" stroke-linecap="round" />
+            </g>
+          </svg>
+        </button>
       </div>
     </section>
 
@@ -224,5 +228,43 @@
     mo.observe(document.documentElement, { subtree: true, childList: true, attributes: true });
   })();
 </script>
+
+<script>
+  (function () {
+    const btn = document.querySelector('.animation-controls .scroll-down');
+    if (!btn) return;
+
+    btn.addEventListener('click', function () {
+      const header = document.querySelector('header');
+      const target = document.querySelector('.layout');
+      if (!target) return;
+
+      const headerH = header ? header.offsetHeight : 0;
+      const seamComp = 1;
+      const targetY = target.getBoundingClientRect().top + window.scrollY - headerH + seamComp;
+
+      // --- slower custom smooth scroll ---
+      const startY = window.scrollY;
+      const distance = targetY - startY;
+      const duration = 1000; // milliseconds — increase this for slower scroll (e.g., 1800, 2000)
+      const startTime = performance.now();
+
+      function step(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        // ease-in-out cubic function
+        const ease = progress < 0.5
+          ? 4 * progress * progress * progress
+          : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+        window.scrollTo(0, startY + distance * ease);
+        if (elapsed < duration) requestAnimationFrame(step);
+      }
+
+      requestAnimationFrame(step);
+    });
+  })();
+</script>
+
+
 
 </html>
