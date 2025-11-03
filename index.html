@@ -103,6 +103,11 @@
         </div>
       </aside>
       
+      <!-- New bottom-left animation card -->
+      <section class="animation-card" aria-labelledby="viz-heading">
+        <h2 id="viz-heading" class="visually-hidden">visualization</h2>
+        <canvas id="side-canvas" role="presentation"></canvas>
+      </section>
 
       <div class="content-column">
         <section class="section-card" aria-labelledby="research-heading">
@@ -174,5 +179,49 @@
     }
   </script>
   <script src="assets/js/animation.js" defer></script>
+  <script src="assets/js/side-animation.js" defer></script>
 </body>
+<script>
+  (function () {
+    function px(n) { return `${Math.max(0, Math.round(n))}px`; }
+
+    function syncHeights() {
+      const contentCol = document.querySelector('.content-column');
+      const bio = document.querySelector('.bio-card');
+      const viz = document.querySelector('.animation-card');
+      if (!contentCol || !bio || !viz) return;
+
+      // Expect right column order: research, publications, contact
+      const cards = contentCol.querySelectorAll('.section-card');
+      const research = cards[0];
+      const publications = cards[1];
+      const contact = cards[2];
+
+      if (research && publications) {
+        const rH = research.getBoundingClientRect().height;
+        const pH = publications.getBoundingClientRect().height;
+
+        // If you “fuse” borders with -1px margins between cards,
+        // compensate so the visual bottom aligns perfectly.
+        const fusedSeamComp = -1; // set to 0 if you removed the -1px seam trick
+        bio.style.height = px(rH + pH - fusedSeamComp);
+      }
+
+      if (contact) {
+        const cH = contact.getBoundingClientRect().height;
+        viz.style.height = px(cH + 1);
+      }
+    }
+
+    // Run on load + whenever layout could change
+    window.addEventListener('load', syncHeights, { once: true });
+    window.addEventListener('resize', syncHeights);
+    // In case fonts/images reflow later:
+    document.fonts && document.fonts.ready && document.fonts.ready.then(syncHeights);
+    // Mutation observer for any async content changes:
+    const mo = new MutationObserver(syncHeights);
+    mo.observe(document.documentElement, { subtree: true, childList: true, attributes: true });
+  })();
+</script>
+
 </html>

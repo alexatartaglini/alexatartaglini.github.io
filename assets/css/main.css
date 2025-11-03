@@ -222,6 +222,7 @@ main {
 .layout {
   display: grid;
   grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+  grid-template-rows: auto auto auto; /* 3 rows: research, publications, contact */
   gap: 0;
   margin-top: -1px;
   align-items: stretch;
@@ -242,6 +243,19 @@ main {
   flex-direction: column;
   gap: 1.5rem;
   overflow: hidden;
+}
+/* Place bio in col 1, spanning first two rows */
+.bio-card {
+  grid-column: 1;
+  grid-row: 1 / span 2;   /* bio covers rows 1–2 */
+  position: relative;
+  top: auto;
+
+  /* Critical bits: */
+  contain: size;          /* prevent its content from contributing to row sizing */
+  min-height: 0;          /* allow the grid to be smaller than the content */
+  height: auto;           /* height comes from the two rows (row1 + row2) */
+  overflow: auto;         /* scroll inside when content is taller than its area */
 }
 
 .bio-card header {
@@ -293,15 +307,51 @@ main {
   font-size: 0.95rem;
 }
 
-.content-column {
+/* New bottom-left animation card */
+.animation-card {
+  grid-column: 1;
+  grid-row: 3;                   /* bottom-left cell */
+  padding: clamp(1.75rem, 4vw, 2.5rem);
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: 0;
+  box-shadow: none;
+
+  contain: size;                 /* don't let content affect row sizing */
+  overflow: hidden;
+
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto;
-  gap: 0;
-  margin-left: -1px;
+  grid-template-rows: 1fr;
+  align-items: stretch;
+  justify-items: stretch;
+  border-top-width: 0;
+  margin-bottom: 1px;
 }
 
-.content-column > .section-card {
-  height: 100%;
+.animation-card canvas {
+  width: 100%;
+  height: 100%;                  /* fill the contact row's height */
+  display: block;
+}
+
+.content-column {
+  grid-column: 2;
+  grid-row: 1 / span 3;
+  display: grid;
+  grid-template-rows: auto auto auto; /* research, publications, contact */
+  row-gap: 0;                         /* ← flush stack: no vertical gap */
+  gap: 0;                             /* ensure no implicit grid gap */
+  margin-left: -1px;                  /* keep your center seam alignment */
+}
+
+.content-column > section {
+  align-self: start;
+  height: auto;         /* override any "height: 100%" rules */
+  min-height: 0;        /* allow rows to be as small as content */
+}
+.content-column > section {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
 }
 
 .section-card {
@@ -320,6 +370,8 @@ main {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  margin-top: -1px;
+  border-top-width: 0;
 }
 
 .section-card[aria-labelledby="publications-heading"] ul {
@@ -340,9 +392,8 @@ main {
 }
 
 .section-card[aria-labelledby="contact-heading"] {
-  margin-top: 0;
+  margin-top: -1px;
   border-top-width: 0;
-  margin-bottom: -1px;
 }
 
 .section-card h2 {
@@ -393,6 +444,21 @@ main {
   font-weight: 500;
 }
 
+.research-card,
+.publications-card,
+.contact-card {
+  height: auto !important;
+  min-height: 0 !important;
+  align-self: start !important;
+}
+
+.bio-card,
+.animation-card {
+  height: auto;      /* JS will set explicit px heights */
+  min-height: 0;     /* don’t force taller than needed */
+  overflow: auto;    /* show scrollbar if content overflows */
+}
+
 footer {
   margin: 4rem auto 2rem;
   width: min(1200px, 100%);
@@ -419,33 +485,30 @@ footer {
 }
 
 @media (max-width: 860px) {
-  header {
-    position: static;
-  }
-  .navbar {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 1rem;
-  }
-  .nav-links {
-    justify-content: center;
-  }
   .layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr;       /* already there */
+    grid-template-rows: auto auto auto auto; /* bio, content, animation, (footer outside) */
   }
+
+  .bio-card {
+    grid-column: 1;
+    grid-row: 1;
+    position: relative;               /* ensure not sticky on mobile */
+    top: auto;
+    height: auto;
+  }
+
   .content-column {
-    display: flex;
+    grid-column: 1;
+    grid-row: 2;                      /* right stack next */
+    display: flex;                    /* you already switch to flex; keep it */
     flex-direction: column;
     margin-left: 0;
   }
-  .content-column > .section-card {
-    height: auto;
-  }
-  .bio-card {
-    position: relative;
-    top: auto;
-    align-self: auto;
-    height: auto;
+
+  .animation-card {
+    grid-column: 1;
+    grid-row: 3;                      /* animation follows under content */
   }
 }
 
