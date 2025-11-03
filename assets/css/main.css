@@ -219,20 +219,28 @@ main {
   border-color: transparent;
 }
 
+
 .layout {
   display: grid;
   grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+  grid-template-rows: auto auto auto;
   gap: 0;
   margin-top: -1px;
-  align-items: stretch;
+  align-items: start;
+}
+
+.content-column {
+  display: contents;
 }
 
 .bio-card {
   position: sticky;
   top: clamp(5rem, 8vh, 7rem);
+  grid-column: 1;
+  grid-row: 1 / span 2;
   align-self: stretch;
-  height: 100%;
   min-height: 0;
+  max-height: var(--bio-target-height, 100%);
   padding: 2rem 1.75rem calc(2rem - 2px);
   background: var(--bg-alt);
   border-radius: 0;
@@ -256,6 +264,7 @@ main {
   padding-right: 0.5rem;
   flex: 1;
   min-height: 0;
+  max-height: var(--bio-scroll-height, none);
 }
 
 .bio-card .bio-scroll::-webkit-scrollbar {
@@ -282,8 +291,7 @@ main {
   border-radius: 50%;
   object-fit: cover;
   margin: 0 auto;
-  border: 4px solid rgba(255, 255, 255, 0.12);
-  border: 4px solid rgba(108, 99, 255, 0.2);
+  border: none;
 }
 
 .bio-card p {
@@ -291,17 +299,6 @@ main {
   line-height: 1.65;
   color: var(--muted);
   font-size: 0.95rem;
-}
-
-.content-column {
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto;
-  gap: 0;
-  margin-left: -1px;
-}
-
-.content-column > .section-card {
-  height: 100%;
 }
 
 .section-card {
@@ -312,7 +309,24 @@ main {
   box-shadow: none;
 }
 
-.content-column .section-card + .section-card {
+.content-column > .section-card {
+  grid-column: 2;
+  margin-left: -1px;
+}
+
+.content-column > .section-card:nth-of-type(1) {
+  grid-row: 1;
+}
+
+.content-column > .section-card:nth-of-type(2) {
+  grid-row: 2;
+}
+
+.content-column > .section-card:nth-of-type(3) {
+  grid-row: 3;
+}
+
+.content-column > .section-card + .section-card {
   margin-top: -1px;
 }
 
