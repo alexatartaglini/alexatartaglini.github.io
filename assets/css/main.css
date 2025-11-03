@@ -208,9 +208,7 @@ main {
 }
 
 .animation-controls button {
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  background: rgba(244, 240, 230, 0.12);
-  border: 1px solid rgba(108, 99, 255, 0.35);
+  border: 1px solid var(--text);
   background: rgba(255, 255, 255, 0.9);
   color: var(--text);
   padding: 0.55rem 1.1rem;
@@ -228,18 +226,44 @@ main {
   border-radius: 50%;
   display: grid;
   place-items: center;
+  transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
 .animation-controls .scroll-down svg {
   display: block;
 }
 
-.animation-controls button[data-active="true"],
-.animation-controls button:hover,
-.animation-controls button:focus {
-  background: var(--accent);
-  color: #fff;
-  border-color: transparent;
+.animation-controls .scroll-down[data-active="true"],
+.animation-controls .scroll-down:hover,
+.animation-controls .scroll-down:focus-visible {
+   background: var(--accent-dark);
+   color: #fff;
+   border-color: #fff;
+}
+.animation-controls .scroll-down:hover {
+  color: #ffffff; /* this automatically recolors the SVG */
+}
+
+.animation-controls button.seed-button {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+}
+.animation-controls .seed-button svg {
+  display: block;
+}
+.animation-controls .seed-button[data-active="true"],
+.animation-controls .seed-button:hover,
+.animation-controls .seed-button:focus-visible {
+   background: var(--accent-dark);
+   color: #fff;
+   border-color: #fff;
+}
+.animation-controls .seed-button:hover {
+  color: #ffffff; /* this automatically recolors the SVG */
 }
 
 .layout {
@@ -453,14 +477,12 @@ main {
 
 .section-card .tag {
   padding: 0.4rem 0.75rem;
-  background: rgba(255, 255, 255, 0.08);
   border-radius: 999px;
   font-size: 0.85rem;
-  color: var(--text);
-  background: var(--accent);
+  color: #ffffff;
+  background: rgba(50, 107, 252);
   border-radius: 999px;
   font-size: 0.85rem;
-  color: var(--accent-dark);
 }
 
 .contact-grid {

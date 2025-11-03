@@ -43,6 +43,15 @@
 
       p.noStroke();
       sizeToParent();
+
+      const seedButton = document.querySelector('.seed-button');
+      if (seedButton) {
+        seedButton.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();           // make sure no other click handlers fire
+          actRandomSeed = p.random(100000);
+        });
+      }
     };
 
     p.windowResized = () => sizeToParent();
@@ -91,7 +100,7 @@
       }
     };
 
-    p.mousePressed = () => { actRandomSeed = p.random(100000); };
+    //p.mousePressed = () => { actRandomSeed = p.random(100000); };
   };
 
   // Mount once DOM is parsed
