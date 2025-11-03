@@ -84,63 +84,70 @@
         </div>
       </aside>
 
-      <div class="content-column">
-        <section class="section-card" aria-labelledby="research-heading">
-          <h2 id="research-heading">>>  research directions  <<</h2>
-          <p>
-            I build computational tools to probe and align large vision, language, and multimodal models. Recent threads include:
-          </p>
-          <ul>
-            <li>Characterizing the internal representations that Vision Transformers form for abstract visual relations.</li>
-            <li>Designing benchmarks and evaluation protocols that enable meaningful human–machine comparisons.</li>
-            <li>Translating ideas from computational neuroscience into mechanistic interpretability for modern models.</li>
-          </ul>
-          <div class="tag-list" aria-hidden="true">
-            <span class="tag">interpretability</span>
-            <span class="tag">vision transformers</span>
-            <span class="tag">representational alignment</span>
-            <span class="tag">cognitive science</span>
-          </div>
-        </section>
+      <section class="section-card section-card--research" aria-labelledby="research-heading">
+        <h2 id="research-heading">>>  research directions  <<</h2>
+        <p>
+          I build computational tools to probe and align large vision, language, and multimodal models. Recent threads include:
+        </p>
+        <ul>
+          <li>Characterizing the internal representations that Vision Transformers form for abstract visual relations.</li>
+          <li>Designing benchmarks and evaluation protocols that enable meaningful human–machine comparisons.</li>
+          <li>Translating ideas from computational neuroscience into mechanistic interpretability for modern models.</li>
+        </ul>
+        <div class="tag-list" aria-hidden="true">
+          <span class="tag">interpretability</span>
+          <span class="tag">vision transformers</span>
+          <span class="tag">representational alignment</span>
+          <span class="tag">cognitive science</span>
+        </div>
+      </section>
 
-        <section class="section-card" aria-labelledby="publications-heading">
-          <h2 id="publications-heading">\\  selected publications  //</h2>
-          <ul>
-            <li>
-              <strong>Human-Machine Perceptual Divergence:</strong> Two investigations on how neural networks see the world. Honors
-              thesis, NYU Minds, Brains, and Machines Initiative Robert J. Glushko Prize, 2023.
-            </li>
-            <li>
-              <strong>Teaching Vision Transformers Abstract Relations:</strong> Ongoing work with Ellie Pavlick and collaborators on
-              grounding relational reasoning in large-scale vision models (in progress).
-            </li>
-            <li>
-              Additional manuscripts and talks coming soon — reach out if you’d like an early copy or to chat.
-            </li>
-          </ul>
-        </section>
+      <section class="section-card section-card--publications" aria-labelledby="publications-heading">
+        <h2 id="publications-heading">\\  selected publications  //</h2>
+        <ul>
+          <li>
+            <strong>Human-Machine Perceptual Divergence:</strong> Two investigations on how neural networks see the world. Honors
+            thesis, NYU Minds, Brains, and Machines Initiative Robert J. Glushko Prize, 2023.
+          </li>
+          <li>
+            <strong>Teaching Vision Transformers Abstract Relations:</strong> Ongoing work with Ellie Pavlick and collaborators on
+            grounding relational reasoning in large-scale vision models (in progress).
+          </li>
+          <li>
+            Additional manuscripts and talks coming soon — reach out if you’d like an early copy or to chat.
+          </li>
+        </ul>
+      </section>
 
-        <section class="section-card" aria-labelledby="contact-heading">
-          <h2 id="contact-heading">::  contact  ::</h2>
-          <p>I’m always excited to discuss new ideas, collaborations, or speaking opportunities.</p>
-          <div class="contact-grid">
-            <div>
-              <strong>Email</strong><br />
-              <a href="mailto:hello@alexatartaglini.com">hello@alexatartaglini.com</a>
-            </div>
-            <div>
-              <strong>Office</strong><br />
-              Gates Computer Science Building<br />
-              Stanford University
-            </div>
-            <div>
-              <strong>Elsewhere</strong><br />
-              Connect via the social links in the header or drop a note on Twitter.
-            </div>
+      <section class="sidebar-card" aria-labelledby="sidebar-animation-heading">
+        <h3 id="sidebar-animation-heading">signal sketchpad</h3>
+        <canvas id="sidebar-animation" role="presentation"></canvas>
+        <p>
+          A playful rendering of drifting signals, inspired by the waveforms I analyze when tracing how models represent vision.
+        </p>
+      </section>
+
+      <section class="section-card section-card--contact" aria-labelledby="contact-heading">
+        <h2 id="contact-heading">::  contact  ::</h2>
+        <p>I’m always excited to discuss new ideas, collaborations, or speaking opportunities.</p>
+        <div class="contact-grid">
+          <div>
+            <strong>Email</strong><br />
+            <a href="mailto:hello@alexatartaglini.com">hello@alexatartaglini.com</a>
           </div>
-        </section>
-      </div>
+          <div>
+            <strong>Office</strong><br />
+            Gates Computer Science Building<br />
+            Stanford University
+          </div>
+          <div>
+            <strong>Elsewhere</strong><br />
+            Connect via the social links in the header or drop a note on Twitter.
+          </div>
+        </div>
+      </section>
     </div>
+
   </main>
 
   <footer>
@@ -154,5 +161,6 @@
     }
   </script>
   <script src="assets/js/animation.js" defer></script>
+  <script src="assets/js/sidebar-animation.js" defer></script>
 </body>
 </html>
