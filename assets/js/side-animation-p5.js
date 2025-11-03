@@ -34,7 +34,6 @@
         for (let i = 1; i <= 7; i++) {
           shapes.push(p.loadImage(`${DATA_BASE}module_${i}.svg`));
         }
-        console.log(shapes);
       };
   
       p.setup = () => {
