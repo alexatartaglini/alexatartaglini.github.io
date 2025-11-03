@@ -1,4 +1,5 @@
 (() => {
+  
   const canvas = document.getElementById('side-canvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');

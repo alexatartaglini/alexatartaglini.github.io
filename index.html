@@ -105,8 +105,7 @@
       
       <!-- New bottom-left animation card -->
       <section class="animation-card" aria-labelledby="viz-heading">
-        <h2 id="viz-heading" class="visually-hidden">visualization</h2>
-        <canvas id="side-canvas" role="presentation"></canvas>
+        <div id="side-canvas" role="presentation" aria-hidden="true"></div>
       </section>
 
       <div class="content-column">
@@ -178,9 +177,11 @@
       year.textContent = new Date().getFullYear();
     }
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.3/lib/p5.min.js" defer></script>
   <script src="assets/js/animation.js" defer></script>
-  <script src="assets/js/side-animation.js" defer></script>
+  <script src="assets/js/side-animation-p5.js" defer></script>
 </body>
+
 <script>
   (function () {
     function px(n) { return `${Math.max(0, Math.round(n))}px`; }
