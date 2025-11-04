@@ -39,6 +39,11 @@ body {
   min-height: 100%;
 }
 
+.accent-dark {
+  color: var(--accent-dark);
+  font-weight: 600; /* optional — adds a subtle emphasis */
+}
+
 a {
   color: var(--accent-dark);
   text-decoration: underline;
@@ -540,11 +545,25 @@ main {
 }
 
 .research-card,
-.publications-card,
 .contact-card {
   height: auto !important;
   min-height: 0 !important;
   align-self: start !important;
+}
+
+.publications-card {
+  max-height: 400px;        /* or whatever height works for you */
+  overflow-y: auto;         /* vertical scroll only when needed */
+  padding-right: 1rem;
+}
+.publications-card::-webkit-scrollbar {
+  width: 6px;
+}
+.publications-card::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  background: var(--bg);
+  border-radius: 999px;
+  border: 1px solid var(--border);
 }
 
 .bio-card,
