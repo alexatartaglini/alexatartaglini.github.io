@@ -14,7 +14,7 @@
   --bg-alt: #ebebeb;
   --text: #21201E;
   --muted: #21201E;
-  --accent: #DC6EEB;
+  --accent: #326bfc;
   --accent-dark: #000000;
   --accent-light: #F0F0F0;
   --border: #21201E;
@@ -79,6 +79,12 @@ header {
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
+  text-decoration: none;
+}
+
+.brand:hover {
+  color: var(--accent-dark);
+  text-decoration: underline;
 }
 
 .brand h1 {
@@ -86,6 +92,7 @@ header {
   font-size: 1.2rem;
   font-weight: 600;
   color: var(--accent-dark);
+  text-decoration: none;
 }
 
 .brand span {
@@ -103,12 +110,15 @@ header {
 }
 
 .nav-links a {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-size: 0.95rem;
   font-weight: 500;
   color: var(--text);
-  padding-bottom: 0.2rem;
-  border-bottom: 2px solid transparent;
-  transition: color 0.2s ease, border-color 0.2s ease;
+  padding: 0.5rem 0.75rem;
+  transition: color 0.2s ease;
   text-decoration: none;
 }
 
@@ -120,6 +130,7 @@ header {
 
 .nav-links a.active {
   color: var(--text);
+  text-decoration: none;
 }
 
 /* Arrow for the active link */
@@ -127,13 +138,13 @@ header {
   content: "";
   position: absolute;
   left: 50%;
-  bottom: calc(100% + 6px); /* sits ABOVE the link; tweak spacing here */
-  transform: translateX(-50%);
-  width: 14px;              /* arrow size */
+  bottom: 100%;               /* anchor arrow just above the text */
+  transform: translate(-50%, 4px);  /* adjust vertical offset */
+  width: 14px;
   height: 10px;
-  z-index: 1;
+  z-index: 10;                /* ensures it appears above other elements */
+  pointer-events: none;       /* don’t block clicks */
 
-  /* Arrow uses currentColor so it adapts to themes/hover */
   background-color: currentColor;
 
   /* Masked SVG so the arrow tints perfectly */
@@ -197,7 +208,7 @@ main {
 
 .hero-content {
   position: relative;
-  max-width: 640px;
+  max-width: 900px;
   text-align: center;
   z-index: 1;
   color: var(--text);
@@ -214,7 +225,7 @@ main {
   margin: 0;
   font-size: clamp(1rem, 2.8vw, 1.25rem);
   line-height: 1.6;
-  color: var(--muted);
+  color: var(--text);
 }
 
 .hero .hero-content {
@@ -507,7 +518,7 @@ main {
   border-radius: 999px;
   font-size: 0.85rem;
   color: #ffffff;
-  background: rgba(50, 107, 252);
+  background: var(--accent);
   border-radius: 999px;
   font-size: 0.85rem;
 }

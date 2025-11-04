@@ -3,9 +3,37 @@
   const sketch = (p) => {
     const MAX_BLUR_PX = 24;      // peak blur when cursor is at extreme left
     const BLUR_MODE = 'exp';   // 'cubic' or 'exp' (try both!)
-    const EXP_K = 15;             // steeper falloff for 'exp' mode
+    const EXP_K = 3;             // steeper falloff for 'exp' mode
 
     let canvasEl;                // we'll keep a handle to the <canvas> DOM node
+
+    const PALETTES = [
+      ['#AFD0E3', '#E693F9'], // blue / pink
+      ['#D9D7D7', '#FFE56B'], // light gray / yellow
+      ['#C3F097', '#65DBA3'], // green / blue
+      ['#FFFFFF', '#D1D1D1'], // white / orange
+      ['#DFC9FF', '#FF6363'], // purple / red
+    ];
+    
+    // current colors used in draw()
+    let BG_HEX = PALETTES[0][0];
+    let SEC_HEX = PALETTES[0][1];
+    let currentPaletteIdx = 0;
+    
+    // pick a palette by index
+    function setPalette(idx) {
+      currentPaletteIdx = idx;
+      BG_HEX = PALETTES[idx][0];
+      SEC_HEX = PALETTES[idx][1];
+    }
+    
+    // pick a random index that's not the current one
+    function randomPaletteIndexExcept(curr) {
+      if (PALETTES.length === 1) return 0;
+      let idx;
+      do { idx = Math.floor(Math.random() * PALETTES.length); } while (idx === curr);
+      return idx;
+    }
 
     let tileCountX = 10;
     let tileCountY = 10;
@@ -42,6 +70,8 @@
       // makes the blur animate smoothly without feeling laggy
       canvasEl.style.transition = 'filter 120ms ease-out';
 
+      setPalette(0); // default on load
+
       window.addEventListener('mousemove', (e) => {
         winX = e.clientX;
         winY = e.clientY;
@@ -63,6 +93,8 @@
           e.preventDefault();
           e.stopPropagation();           // make sure no other click handlers fire
           actRandomSeed = p.random(100000);
+          const nextIdx = randomPaletteIndexExcept(currentPaletteIdx);
+          setPalette(nextIdx);
         });
       }
     };
@@ -70,7 +102,7 @@
     p.windowResized = () => sizeToParent();
 
     p.draw = () => {
-      p.background(175, 208, 227);
+      p.background(BG_HEX);
       p.randomSeed(actRandomSeed);
 
       // guard tiny values so we never divide by 0
@@ -107,8 +139,8 @@
             const t = i / stepSize;
 
             const col = p.lerpColor(
-              p.color(175, 208, 227),
-              p.color(230, 147, 249),
+              p.color(BG_HEX),
+              p.color(SEC_HEX),
               t
             );
             p.fill(col);
