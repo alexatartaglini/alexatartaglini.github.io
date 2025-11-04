@@ -1,7 +1,12 @@
 // assets/js/hero-p5.js
 (function () {
   const sketch = (p) => {
-    // your original variables, scoped to this p5 instance
+    const MAX_BLUR_PX = 24;      // peak blur when cursor is at extreme left
+    const BLUR_MODE = 'exp';   // 'cubic' or 'exp' (try both!)
+    const EXP_K = 15;             // steeper falloff for 'exp' mode
+
+    let canvasEl;                // we'll keep a handle to the <canvas> DOM node
+
     let tileCountX = 10;
     let tileCountY = 10;
     let tileWidth, tileHeight;
@@ -28,6 +33,14 @@
       const mount = document.getElementById('hero-p5'); // keep as the DOM parent
       const c = p.createCanvas(10, 10);
       c.parent(mount);
+      canvasEl = c.elt;
+      canvasEl.style.position = 'absolute';
+      canvasEl.style.inset = '0';
+      canvasEl.style.width = '100%';
+      canvasEl.style.height = '100%';
+      canvasEl.style.display = 'block';
+      // makes the blur animate smoothly without feeling laggy
+      canvasEl.style.transition = 'filter 120ms ease-out';
 
       window.addEventListener('mousemove', (e) => {
         winX = e.clientX;
@@ -67,6 +80,17 @@
       // normalize cursor in viewport space
       const nx = Math.min(1, Math.max(0, winX / window.innerWidth));
       const ny = Math.min(1, Math.max(0, winY / window.innerHeight));
+
+      let blurPx;
+      if (BLUR_MODE === 'cubic') {
+        // strong near-left blur, drops off steeply to the right
+        blurPx = MAX_BLUR_PX * Math.pow(1 - nx, 3);
+      } else {
+        // exponential falloff (even steeper feel)
+        blurPx = MAX_BLUR_PX * Math.exp(-EXP_K * nx);
+      }
+      // apply to the canvas element
+      canvasEl.style.filter = `blur(${blurPx.toFixed(2)}px)`;
 
       // map to canvas scale so moving anywhere in the window drives the full range
       stepSize = Math.max(1, Math.floor((nx * p.width) / 10));

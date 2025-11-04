@@ -14,11 +14,14 @@
   --bg-alt: #ebebeb;
   --text: #21201E;
   --muted: #21201E;
-  --accent: #5B7A73;
+  --accent: #DC6EEB;
   --accent-dark: #000000;
   --accent-light: #F0F0F0;
   --border: #21201E;
   --shadow: none;
+  --link: var(--accent-dark);
+  --link-hover: var(--accent);
+  --link-underline: currentColor; /* underline color */
   font-size: 16px;
 }
 
@@ -37,13 +40,13 @@ body {
 }
 
 a {
-  color: var(--accent);
-  text-decoration: none;
+  color: var(--accent-dark);
+  text-decoration: underline;
 }
 
 a:hover,
 a:focus {
-  color: var(--accent-dark);
+  color: var(--accent);
   text-decoration: underline;
 }
 
@@ -90,30 +93,52 @@ header {
   color: var(--muted);
 }
 
+
 .nav-links {
   display: flex;
   align-items: center;
   gap: 1.5rem;
   flex-wrap: wrap;
+  text-decoration: none;
 }
 
 .nav-links a {
   font-size: 0.95rem;
   font-weight: 500;
-  color: var(--muted);
+  color: var(--text);
   padding-bottom: 0.2rem;
   border-bottom: 2px solid transparent;
   transition: color 0.2s ease, border-color 0.2s ease;
+  text-decoration: none;
 }
 
 .nav-links a:hover,
 .nav-links a:focus {
-  color: var(--text);
+  color: var(--accent-dark);
+  text-decoration: underline;
 }
 
 .nav-links a.active {
   color: var(--text);
-  border-color: var(--accent);
+}
+
+/* Arrow for the active link */
+.nav-links a.active::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 6px); /* sits ABOVE the link; tweak spacing here */
+  transform: translateX(-50%);
+  width: 14px;              /* arrow size */
+  height: 10px;
+  z-index: 1;
+
+  /* Arrow uses currentColor so it adapts to themes/hover */
+  background-color: currentColor;
+
+  /* Masked SVG so the arrow tints perfectly */
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 16'><path d='M4 4l8 8 8-8' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/></svg>") no-repeat center / contain;
+          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 16'><path d='M4 4l8 8 8-8' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/></svg>") no-repeat center / contain;
 }
 
 .social-links {
@@ -123,7 +148,7 @@ header {
 }
 
 .social-links a {
-  color: var(--muted);
+  color: var(--accent-dark);
   transition: color 0.2s ease;
 }
 
@@ -494,6 +519,13 @@ main {
 
 .contact-grid a {
   font-weight: 500;
+  text-decoration: underline;
+  color: var(--accent-dark);
+}
+.contact-grid a:hover,
+.contact-grid a:focus {
+  color: var(--accent);
+  text-decoration: underline;
 }
 
 .research-card,
