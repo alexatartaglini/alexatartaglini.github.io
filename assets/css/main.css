@@ -14,8 +14,9 @@
   --bg-alt: #ebebeb;
   --text: #21201E;
   --muted: #21201E;
-  --accent: #9E9E9E;
+  --accent: #5B7A73;
   --accent-dark: #000000;
+  --accent-light: #F0F0F0;
   --border: #21201E;
   --shadow: none;
   font-size: 16px;
@@ -81,6 +82,7 @@ header {
   margin: 0;
   font-size: 1.2rem;
   font-weight: 600;
+  color: var(--accent-dark);
 }
 
 .brand span {
@@ -325,16 +327,16 @@ main {
 
 .bio-card .bio-scroll::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.2);
-  background: var(--accent);
+  background: var(--bg);
   border-radius: 999px;
+  border: 1px solid var(--border);
 }
 
 .bio-card h3 {
   margin: 0;
   font-size: 1rem;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--muted);
+  color: var(--accent-dark)
 }
 
 .bio-card img {
