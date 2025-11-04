@@ -37,6 +37,15 @@ body {
   background: var(--bg);
   color: var(--text);
   min-height: 100%;
+  scrollbar-gutter: stable;
+}
+
+.cv-page embed, iframe {
+  width: 100%;
+  height: 80vh; /* dynamic height, fills most of viewport */
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  flex: 1;
 }
 
 .accent-dark {
@@ -573,6 +582,11 @@ main {
   overflow: auto;    /* show scrollbar if content overflows */
 }
 
+.cv-page section-card {
+  min-height: 80vh; /* gives it tall space for the PDF */
+  height: auto;     /* allows it to expand if PDF is taller */
+}
+
 footer {
   margin: 4rem auto 2rem;
   width: min(1200px, 100%);
@@ -599,17 +613,19 @@ footer {
 }
 
 @media (max-width: 860px) {
+  .cv-page iframe,
+  .cv-page embed {
+    display: none;
+  }
+
+  .cv-page .pdf-fallback {
+    display: block;
+    margin-top: 1rem;
+  }
+  
   .layout {
     grid-template-columns: 1fr;       /* already there */
     grid-template-rows: auto auto auto auto; /* bio, content, animation, (footer outside) */
-  }
-
-  .bio-card {
-    grid-column: 1;
-    grid-row: 1;
-    position: relative;               /* ensure not sticky on mobile */
-    top: auto;
-    height: auto;
   }
 
   .content-column {
@@ -623,6 +639,14 @@ footer {
   .animation-card {
     grid-column: 1;
     grid-row: 3;                      /* animation follows under content */
+  }
+
+  .bio-card {
+    grid-column: 1;
+    grid-row: 1;
+    position: relative;               /* ensure not sticky on mobile */
+    top: auto;
+    height: auto;
   }
 }
 
