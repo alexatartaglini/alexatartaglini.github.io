@@ -44,8 +44,30 @@
     let actRandomSeed = 0;
 
     let parentEl, W = 0, H = 0;
-
     let winX = 0, winY = 0;
+
+    const mqCoarse = window.matchMedia('(pointer: coarse)');
+    const mqNarrow = window.matchMedia('(max-width: 860px)');
+    let isMobile = mqCoarse.matches || mqNarrow.matches;
+
+    [mqCoarse, mqNarrow].forEach(mq => {
+      mq.addEventListener?.('change', () => {
+        isMobile = mqCoarse.matches || mqNarrow.matches;
+      });
+    });
+
+    // shared progress override (0..1) that draw() will read
+    let nxFromScroll = null;
+
+    function getHeroProgress(el) {
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      const rect = el.getBoundingClientRect();
+      const total = rect.height + vh;          // distance hero travels across the viewport
+      const traveled = vh - rect.top;          // how far since it started entering
+      return Math.min(1, Math.max(0, traveled / total));
+    }
+
+    function clamp(v, a = 0, b = 1) { return Math.min(b, Math.max(a, v)); }
 
     function sizeToParent() {
       const rect = parentEl.getBoundingClientRect();
@@ -56,9 +78,50 @@
       tileHeight = p.height / tileCountY;
     }
 
+    let scrollBindingsAttached = false;
+    
+    function inViewport(el) {
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      const r = el.getBoundingClientRect();
+      // "any part visible" criterion
+      return r.bottom > 0 && r.top < vh;
+    }
+
+    function onScrollOrResize() {
+      if (!parentEl) return;
+
+      // compute progress across viewport path
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      const rect = parentEl.getBoundingClientRect();
+      const total = rect.height + vh;
+      const traveled = vh - rect.top;
+      const pVal = Math.min(1, Math.max(0, traveled / total));
+
+      // keep a copy so draw() can read it
+      nxFromScroll = pVal;
+
+      // keep vertical neutral (or tie to pVal if you want)
+      winY = (window.innerHeight || 1) * 0.5;
+
+      // update blur immediately so it responds during scroll
+      const blurPx = MAX_BLUR_PX * Math.exp(-EXP_K * pVal);
+      if (canvasEl && inViewport(parentEl) && (isMobile)) {
+        canvasEl.style.filter = `blur(${blurPx.toFixed(2)}px)`;
+      }
+    }
+
+    function attachScrollBindings() {
+      if (scrollBindingsAttached || !parentEl) return;
+      window.addEventListener('scroll', onScrollOrResize, { passive: true });
+      window.addEventListener('resize', onScrollOrResize, { passive: true });
+      scrollBindingsAttached = true;
+      // run once so initial state is correct (e.g., hero mid-viewport)
+      onScrollOrResize();
+    }
+
     p.setup = () => {
-      parentEl = document.querySelector('.hero'); // was: document.getElementById('hero-p5')
-      const mount = document.getElementById('hero-p5'); // keep as the DOM parent
+      parentEl = document.querySelector('.hero'); 
+      const mount = document.getElementById('hero-p5');
       const c = p.createCanvas(10, 10);
       c.parent(mount);
       canvasEl = c.elt;
@@ -67,15 +130,94 @@
       canvasEl.style.width = '100%';
       canvasEl.style.height = '100%';
       canvasEl.style.display = 'block';
-      // makes the blur animate smoothly without feeling laggy
       canvasEl.style.transition = 'filter 120ms ease-out';
 
       setPalette(0); // default on load
+      attachScrollBindings();
 
-      window.addEventListener('mousemove', (e) => {
+      // Keep your mouse tracking for desktop
+      function mouseMove(e) { winX = e.clientX; winY = e.clientY; }
+      window.addEventListener('mousemove', mouseMove);
+
+      function isMobileLike() {
+        return (
+          window.matchMedia?.('(hover: none)').matches ||
+          window.matchMedia?.('(pointer: coarse)').matches ||
+          navigator.maxTouchPoints > 0 ||
+          window.innerWidth <= 860
+        );
+      }
+
+      isMobile = isMobileLike();
+
+      /*
+      // If media queries change, recompute isMobile and nudge the bindings/blur once.
+      [mqCoarse, mqNarrow].forEach((mq) => {
+        mq.addEventListener?.('change', () => {
+          isMobile = isMobileLike();
+          onScrollOrResize(); // ensure immediate update when mode flips
+        });
+      });
+      */
+
+      p.noStroke();
+      sizeToParent();
+
+      const seedButton = document.querySelector('.seed-button');
+      if (seedButton) {
+        seedButton.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          actRandomSeed = p.random(100000);
+          const nextIdx = randomPaletteIndexExcept(currentPaletteIdx);
+          setPalette(nextIdx);
+        });
+      }
+
+      /*
+      if (isMobile && parentEl) {
+        // initialize progress and center the "mouse"
+        const prog = getHeroProgress(parentEl);
+        nxFromScroll = prog;
+      
+        // update on scroll/resize; passive for perf
+        const onScrollOrResize = () => {
+          if (!parentEl) return;
+          const pVal = getHeroProgress(parentEl);
+          nxFromScroll = pVal;
+      
+          // keep vertical influence stable (feel free to tie it to pVal)
+          winY = (window.innerHeight || 1) * 0.5;
+      
+          // update blur immediately so it responds during scroll even if rAF is throttled
+          const MAX_BLUR_PX = 24;
+          const EXP_K = 3;
+          const blurPx = MAX_BLUR_PX * Math.exp(-EXP_K * pVal);
+          if (canvasEl) canvasEl.style.filter = `blur(${blurPx.toFixed(2)}px)`;
+        };
+      
+        // listen on window (covers iOS Safari)
+        window.addEventListener('scroll', onScrollOrResize, { passive: true });
+        window.addEventListener('resize', onScrollOrResize, { passive: true });
+      
+        // run once in case the hero starts mid-viewport
+        onScrollOrResize();
+      }
+
+      function mouseMove(e) {
         winX = e.clientX;
         winY = e.clientY;
-      });
+      }
+      window.addEventListener('mousemove', mouseMove);
+
+      for (const mq of [mqCoarse, mqNarrow]) {
+        mq.addEventListener?.('change', () => {
+          if (mq.matches) {
+            winX = (window.innerWidth || 1) * 0.5;
+            winY = (window.innerHeight || 1) * 0.5;
+          }
+        });
+      }
 
       // Fill the hero box
       c.elt.style.position = 'absolute';
@@ -97,21 +239,73 @@
           setPalette(nextIdx);
         });
       }
+        */
     };
 
     p.windowResized = () => sizeToParent();
+
+    const clamp01 = (v) => Math.max(0, Math.min(1, v));
+    const HEADER_OFFSET = document.querySelector('header')?.offsetHeight || 0;
+
+    /**
+     * Progress tied ONLY to the hero's height:
+     *  - 0 when hero's top is at viewport top (rect.top === 0)
+     *  - 1 when hero's bottom reaches viewport top (rect.top === -heroH)
+     * Assumes hero starts at page top. Works even if not — it clamps to [0,1].
+     * If you have a sticky header, pass its height as topOffset.
+     */
+    /**
+     * Progress tied ONLY to the hero's height.
+     * Returns a value between start and end (default 0 → 1).
+     * Example: heroSelfProgress(heroEl, 0, 0.25, 0.75) // → 0.25–0.75 range
+     */
+    function heroSelfProgress(heroEl, topOffset = 0, start = 0.25, end = 0.75) {
+      const rect = heroEl.getBoundingClientRect();
+      const heroH = rect.height;
+
+      // How far the hero's top has moved past the (offset) top of viewport
+      const traveled = Math.min(Math.max(topOffset - rect.top, 0), heroH); // clamp 0..heroH
+      const raw = traveled / heroH; // 0..1
+
+      // Remap 0..1 to [start, end]
+      return start + (end - start) * raw;
+    }
+    /** Optional: Is any part of hero on screen? */
+    function heroInView(heroEl) {
+      const r = heroEl.getBoundingClientRect();
+      return r.bottom > 0 && r.top < window.innerHeight;
+    }
 
     p.draw = () => {
       p.background(BG_HEX);
       p.randomSeed(actRandomSeed);
 
-      // guard tiny values so we never divide by 0
-      //stepSize = Math.max(1, Math.floor(Math.min(p.mouseX, p.width) / 10));
-      //endSize  = Math.min(p.mouseY, p.height) / 10;
+      let nx = clamp01(winX / window.innerWidth);
+      let ny = clamp01(winY / window.innerHeight);
 
-      // normalize cursor in viewport space
-      const nx = Math.min(1, Math.max(0, winX / window.innerWidth));
-      const ny = Math.min(1, Math.max(0, winY / window.innerHeight));
+      if (parentEl && isMobile && inViewport(parentEl)) {
+        // Prefer scroll-derived progress on mobile while visible
+        const progress = heroSelfProgress(parentEl, HEADER_OFFSET); // 0..1 over exactly hero height
+        nx = progress; // full span on mobile
+        ny = progress;
+      }
+
+      /*
+      if (isMobile && parentEl) {
+        // prefer scroll-derived progress when available
+        const inView = (() => {
+          const vh = window.innerHeight || document.documentElement.clientHeight;
+          const r = parentEl.getBoundingClientRect();
+          return r.bottom > 0 && r.top < vh;
+        })();
+      
+        if (inView) {
+          const progress = (nxFromScroll != null) ? nxFromScroll : getHeroProgress(parentEl);
+          nx = progress;  // horizontal surrogate driven by vertical scroll
+          ny = 0.5;       // or tie to progress if you want: ny = 0.5 + 0.4*(progress - 0.5)
+        }
+      }
+      */
 
       let blurPx;
       if (BLUR_MODE === 'cubic') {
