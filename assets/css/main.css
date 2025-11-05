@@ -625,6 +625,46 @@ footer {
     margin-top: 1rem;
   }
 
+  .hero {
+    margin-top: -1px;   /* was 0 on tablet; restore -1px on mobile */
+  }
+
+  .navbar {
+    display: grid;
+    grid-template-columns: 1fr auto; /* brand grows, socials hug right */
+    grid-template-rows: auto auto;   /* links live on their own bottom row */
+    align-items: end;                /* keep things visually “bottom-aligned” */
+    gap: 0.5rem 1rem;
+    padding: 0.75rem 1rem;           /* a touch tighter on mobile */
+  }
+
+  .brand {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    /* let it breathe more horizontally on mobile */
+    max-width: none;
+  }
+
+  .social-links {
+    grid-column: 2 / 3;
+    grid-row: 2;
+    justify-self: end;
+    align-self: center;
+    padding-top: 0.75rem;
+  }
+
+  .nav-links {
+    grid-column: 1 / 2;   /* span full width under brand/socials */
+    grid-row: 2;
+    align-self: end;
+    display: flex;
+    flex-wrap: nowrap;     /* force a single horizontal row */
+    gap: 0.75rem;
+    justify-content: flex-start;
+    /* optional: nudge closer to the header’s bottom edge */
+    padding-top: 0.75rem;
+  }
+
   .layout {
     grid-template-columns: 1fr;       /* already there */
     grid-template-rows: auto auto auto auto; /* bio, content, animation, (footer outside) */
@@ -649,12 +689,14 @@ footer {
     position: relative;               /* ensure not sticky on mobile */
     top: auto;
     height: auto;
+    margin-bottom: -1px;
   }
 }
 
 @media (max-width: 560px) {
   .hero {
     padding: 2.25rem 1.75rem 3.5rem;
+    margin-top: -1px;
   }
   .animation-controls {
     position: static;
@@ -671,5 +713,6 @@ footer {
   .bio-card {
     padding: 1.5rem;
     border-radius: 0;
+    margin-bottom: -1px;
   }
 }
