@@ -40,6 +40,8 @@ body {
   scrollbar-gutter: stable;
 }
 
+.hero canvas { will-change: filter; }
+
 .cv-page embed, iframe {
   width: 100%;
   height: 80vh; /* dynamic height, fills most of viewport */
@@ -622,7 +624,7 @@ footer {
     display: block;
     margin-top: 1rem;
   }
-  
+
   .layout {
     grid-template-columns: 1fr;       /* already there */
     grid-template-rows: auto auto auto auto; /* bio, content, animation, (footer outside) */
