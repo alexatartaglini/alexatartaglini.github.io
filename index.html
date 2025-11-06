@@ -317,7 +317,7 @@
   })();
 </script>
 
-<script>
+<<script>
   (function () {
     const isTouch = matchMedia?.('(hover: none)')?.matches || ('ontouchstart' in window);
     if (!isTouch) return;
@@ -328,24 +328,25 @@
       if (!track || !thumb) return;
   
       function update() {
-        const sh = scroller.scrollHeight;   // total content
-        const ch = scroller.clientHeight;   // visible area (full height)
-        const st = scroller.scrollTop;
+        // Ensure the overlay track exactly matches the visible viewport of the scroller
+        const ch = scroller.clientHeight;     // viewport height
+        const sh = scroller.scrollHeight;     // total content height
+        const st = scroller.scrollTop;        // scroll offset
   
-        // No overflow => hide thumb entirely
-        if (sh <= ch + 1) {                 // +1 guards rounding
+        // Track spans the viewport, not the content
+        track.style.height = ch + 'px';
+  
+        // Hide if no overflow
+        if (sh <= ch + 1) {
           track.style.display = 'none';
           return;
+        } else {
+          track.style.display = 'block';
         }
-        track.style.display = 'block';
   
-        // Track height is the scroller's visible height
-        const trackH = ch;
-  
-        // Thumb height reflects visible fraction (min for usability)
-        const thumbH = Math.max((ch / sh) * trackH, 24);
-  
-        const maxTop = trackH - thumbH;
+        // Thumb height proportional to visible fraction, with minimum size
+        const thumbH = Math.max((ch / sh) * ch, 24);
+        const maxTop = ch - thumbH;
         const top = Math.min(maxTop, (st / (sh - ch)) * maxTop);
   
         thumb.style.height = thumbH + 'px';
@@ -355,10 +356,11 @@
       scroller.addEventListener('scroll', update, { passive: true });
       addEventListener('resize', update);
   
-      // keep in sync as content/fonts load/change
+      // Track layout/content changes too
       const mo = new MutationObserver(update);
       mo.observe(scroller, { childList: true, subtree: true, characterData: true });
   
+      // Initial settle after fonts/images
       requestAnimationFrame(update);
       setTimeout(update, 100);
     }
@@ -366,6 +368,6 @@
     document.querySelectorAll('.bio-card .bio-scroll, .publications-card .publications-scroll')
       .forEach(initCustomScrollbar);
   })();
-  </script>
+  </script>  
   
 </html>

@@ -791,10 +791,53 @@ footer {
   }
 
   .bio-card .bio-scroll {
-    flex: 1 1 auto;              /* this area does the scrolling */
-    min-height: 0;               /* critical for scroll */
-    padding-right: 0.5rem;
+    flex: 1 1 auto;        /* fill remaining vertical space */
+    min-height: 0;         /* critical for flex children to allow scrolling */
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    position: relative;     /* anchor the custom scrollbar */
+    padding-right: 0.75rem; /* keep text clear of the bar */
+    scrollbar-width: none;  /* hide native on Firefox (mobile) */
   }
+  .bio-card .bio-scroll::-webkit-scrollbar { display: none; } /* hide native on WebKit */
+
+  /* Invisible full-height overlay track */
+  .custom-scrollbar {
+    position: absolute;
+    top: 0;                 /* span the full scroll viewport */
+    right: 2px;
+    bottom: 0;
+    width: 6px;
+    background: transparent;
+    border: none;
+    pointer-events: none;
+  }
+  .custom-scrollbar .thumb {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 24px;           /* JS updates */
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+  }
+
+  /* Do the same for publications if needed */
+  .publications-card {
+    display: flex;
+    flex-direction: column;
+    max-height: 50vh;       /* or whatever fits your layout */
+  }
+  .publications-card .publications-scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+    padding-right: 0.75rem;
+    scrollbar-width: none;
+  }
+  .publications-card .publications-scroll::-webkit-scrollbar { display: none; }
 }
 
 @media (max-width: 560px) {
