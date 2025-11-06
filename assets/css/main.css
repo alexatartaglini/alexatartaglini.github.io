@@ -634,15 +634,50 @@ footer {
   background: linear-gradient(to bottom, rgba(0,0,0,0), var(--bg));
 }
 
+/* MOBILE ONLY: replace native scrollbars with a custom always-visible one */
 @media (hover: none) {
-  .animation-controls button:hover,
-  .social-links a:hover {
-    color: inherit;
-    background: inherit;
-    border-color: inherit;
+  .bio-card .bio-scroll,
+  .publications-card .publications-scroll {
+    /* keep scrolling behavior */
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    position: relative;      /* anchor for custom bar */
+    scrollbar-width: none;   /* Firefox: hide native */
   }
-  .animation-controls button:focus-visible {
-    outline: none;
+  .bio-card .bio-scroll::-webkit-scrollbar,
+  .publications-card .publications-scroll::-webkit-scrollbar {
+    display: none;           /* WebKit: hide native */
+  }
+
+  /* Track */
+  .custom-scrollbar {
+    position: absolute;
+    top: 4px;
+    right: 2px;              /* nudge to match desktop spacing */
+    bottom: 4px;
+    width: 6px;              /* match desktop thin width */
+    background: var(--bg);   /* desktop-like light track */
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    pointer-events: none;    /* don’t block scrolling */
+    opacity: 1;              /* always visible */
+  }
+
+  /* Thumb */
+  .custom-scrollbar .thumb {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 24px;            /* JS will update; this is a fallback */
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+  }
+
+  /* Ensure content doesn't sit under the bar */
+  .bio-card .bio-scroll,
+  .publications-card .publications-scroll {
+    padding-right: 0.75rem;
   }
 }
 
