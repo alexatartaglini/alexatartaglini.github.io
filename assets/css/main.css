@@ -602,14 +602,47 @@ footer {
   font-size: 0.85rem;
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .animation-controls .seed-button:hover,
-  .animation-controls .seed-button:focus-visible,
-  .animation-controls .scroll-down:hover,
-  .animation-controls .scroll-down:focus-visible {
-    background: var(--accent-dark);
-    color: #fff;
-    border-color: #fff;
+.bio-card .bio-scroll,
+.publications-card .publications-scroll {
+  scrollbar-width: thin;                  /* Firefox: thin scrollbar */
+  scrollbar-gutter: stable both-edges;    /* Reserve gutter so it’s visibly “there” */
+  -webkit-overflow-scrolling: touch;      /* iOS smooth scroll */
+}
+
+/* WebKit scrollbar styling to match desktop */
+.bio-card .bio-scroll::-webkit-scrollbar,
+.publications-card .publications-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.bio-card .bio-scroll::-webkit-scrollbar-thumb,
+.publications-card .publications-scroll::-webkit-scrollbar-thumb {
+  background: var(--bg);
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+
+/* Subtle “scroll hint” fade on the bottom of publications (helps on iOS where bars autohide) */
+.publications-card {
+  position: relative;
+}
+.publications-card::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 16px;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(0,0,0,0), var(--bg));
+}
+
+@media (hover: none) {
+  .animation-controls button:hover,
+  .social-links a:hover {
+    color: inherit;
+    background: inherit;
+    border-color: inherit;
+  }
+  .animation-controls button:focus-visible {
+    outline: none;
   }
 }
 
@@ -719,6 +752,20 @@ footer {
     top: auto;
     height: auto;
     margin-bottom: -1px;
+    max-height: 68vh;            /* adjust to taste */
+    display: flex;               /* already flex; keep it explicit */
+    gap: 1rem;                   /* slightly tighter */
+    padding-bottom: 1rem;        /* trim bottom space */
+  }
+  .bio-card img {
+    flex: 0 0 auto;              /* don’t let headshot steal flex height */
+    margin-bottom: 0.25rem;
+  }
+
+  .bio-card .bio-scroll {
+    flex: 1 1 auto;              /* this area does the scrolling */
+    min-height: 0;               /* critical for scroll */
+    padding-right: 0.5rem;
   }
 }
 

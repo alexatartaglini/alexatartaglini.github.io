@@ -90,4 +90,37 @@
     }
   </script>
 </body>
+
+<script>
+  (function () {
+    const isTouch = window.matchMedia?.('(hover: none)')?.matches || ('ontouchstart' in window);
+
+    // Helper to flash [data-active] briefly
+    function flashActive(el, ms = 180) {
+      el.setAttribute('data-active', 'true');
+      window.setTimeout(() => {
+        el.removeAttribute('data-active');
+        el.blur?.();
+      }, ms);
+    }
+
+    if (isTouch) {
+      // Seed + Scroll buttons
+      const seedBtn = document.querySelector('.animation-controls .seed-button');
+      const downBtn = document.querySelector('.animation-controls .scroll-down');
+      [seedBtn, downBtn].forEach(btn => {
+        if (!btn) return;
+        btn.addEventListener('touchstart', () => flashActive(btn), { passive: true });
+        btn.addEventListener('click', () => flashActive(btn), { passive: true });
+      });
+
+      // Social links: prevent sticky hover/focus
+      document.querySelectorAll('.social-links a').forEach(a => {
+        a.addEventListener('touchend', () => a.blur(), { passive: true });
+        a.addEventListener('click',    () => a.blur(), { passive: true });
+      });
+    }
+  })();
+</script>
+
 </html>
