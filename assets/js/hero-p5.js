@@ -171,6 +171,13 @@
           actRandomSeed = p.random(100000);
           const nextIdx = randomPaletteIndexExcept(currentPaletteIdx);
           setPalette(nextIdx);
+
+          seedButton.setAttribute('data-active', 'true'); // flash active
+          seedButton.blur();                               // clear sticky :focus-visible
+          setTimeout(() => {
+            seedButton.removeAttribute('data-active');
+            seedButton.setAttribute('data-active', 'false');
+          }, 220); // brief flash before returning to normal
         });
       }
 

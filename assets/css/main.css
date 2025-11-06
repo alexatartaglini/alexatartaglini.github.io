@@ -272,6 +272,11 @@ main {
   cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
+.animation-controls button:active {
+  background: var(--accent-dark);
+  color: #fff;
+  border-color: #fff;
+}
 
 .animation-controls .scroll-down {
   width: 48px;
@@ -597,6 +602,17 @@ footer {
   font-size: 0.85rem;
 }
 
+@media (hover: hover) and (pointer: fine) {
+  .animation-controls .seed-button:hover,
+  .animation-controls .seed-button:focus-visible,
+  .animation-controls .scroll-down:hover,
+  .animation-controls .scroll-down:focus-visible {
+    background: var(--accent-dark);
+    color: #fff;
+    border-color: #fff;
+  }
+}
+
 @media (max-width: 1024px) {
   .navbar {
     padding: 1rem;
@@ -681,6 +697,19 @@ footer {
   .animation-card {
     grid-column: 1;
     grid-row: 3;                      /* animation follows under content */
+  }
+  .animation-card {
+    scrollbar-width: none;        /* Firefox */
+  }
+  .animation-card::-webkit-scrollbar {
+    display: none;                /* Chrome/Safari */
+  }
+
+  .animation-card,
+  #side-canvas,
+  .aniamtion-card canvas {
+    overflow: hidden !important;
+    overscroll-behavior: contain; 
   }
 
   .bio-card {
