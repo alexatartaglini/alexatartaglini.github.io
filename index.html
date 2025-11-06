@@ -319,53 +319,53 @@
 
 <script>
   (function () {
-    const isTouch = window.matchMedia?.('(hover: none)')?.matches || ('ontouchstart' in window);
-    if (!isTouch) return; // Desktop keeps native styling
+    const isTouch = matchMedia?.('(hover: none)')?.matches || ('ontouchstart' in window);
+    if (!isTouch) return;
   
     function initCustomScrollbar(scroller) {
-      if (!scroller) return;
       const track = scroller.querySelector('.custom-scrollbar');
-      if (!track) return;
-      const thumb = track.querySelector('.thumb');
+      const thumb = track?.querySelector('.thumb');
+      if (!track || !thumb) return;
   
       function update() {
-        const sh = scroller.scrollHeight;
-        const ch = scroller.clientHeight;
+        const sh = scroller.scrollHeight;   // total content
+        const ch = scroller.clientHeight;   // visible area (full height)
         const st = scroller.scrollTop;
   
-        // Guard: no overflow
-        if (sh <= ch) {
+        // No overflow => hide thumb entirely
+        if (sh <= ch + 1) {                 // +1 guards rounding
           track.style.display = 'none';
           return;
-        } else {
-          track.style.display = 'block';
         }
+        track.style.display = 'block';
   
-        // Thumb size: viewport fraction (min size for usability)
-        const thumbH = Math.max((ch / sh) * track.clientHeight, 24);
-        const maxTop = track.clientHeight - thumbH;
+        // Track height is the scroller's visible height
+        const trackH = ch;
+  
+        // Thumb height reflects visible fraction (min for usability)
+        const thumbH = Math.max((ch / sh) * trackH, 24);
+  
+        const maxTop = trackH - thumbH;
         const top = Math.min(maxTop, (st / (sh - ch)) * maxTop);
   
         thumb.style.height = thumbH + 'px';
-        thumb.style.transform = 'translateY(' + top + 'px)';
+        thumb.style.transform = `translateY(${top}px)`;
       }
   
-      // Update on scroll/resize and when content changes
       scroller.addEventListener('scroll', update, { passive: true });
-      window.addEventListener('resize', update);
+      addEventListener('resize', update);
   
-      // Observe content changes to keep it accurate
+      // keep in sync as content/fonts load/change
       const mo = new MutationObserver(update);
       mo.observe(scroller, { childList: true, subtree: true, characterData: true });
   
-      // Font loading/layout settle
-      window.requestAnimationFrame(update);
-      window.setTimeout(update, 100);
+      requestAnimationFrame(update);
+      setTimeout(update, 100);
     }
   
     document.querySelectorAll('.bio-card .bio-scroll, .publications-card .publications-scroll')
       .forEach(initCustomScrollbar);
   })();
-  </script>  
-
+  </script>
+  
 </html>

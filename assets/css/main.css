@@ -634,50 +634,43 @@ footer {
   background: linear-gradient(to bottom, rgba(0,0,0,0), var(--bg));
 }
 
-/* MOBILE ONLY: replace native scrollbars with a custom always-visible one */
 @media (hover: none) {
+  /* Container stays scrollable; ensure it can size correctly */
   .bio-card .bio-scroll,
   .publications-card .publications-scroll {
-    /* keep scrolling behavior */
+    position: relative;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
-    position: relative;      /* anchor for custom bar */
-    scrollbar-width: none;   /* Firefox: hide native */
+    scrollbar-width: none;
+    padding-right: 0.75rem; /* keep space so thumb doesn't overlap text */
+    min-height: 0;          /* critical for flex children on iOS */
   }
   .bio-card .bio-scroll::-webkit-scrollbar,
   .publications-card .publications-scroll::-webkit-scrollbar {
-    display: none;           /* WebKit: hide native */
+    display: none;
   }
 
-  /* Track */
+  /* Track: full height, invisible */
   .custom-scrollbar {
     position: absolute;
-    top: 4px;
-    right: 2px;              /* nudge to match desktop spacing */
-    bottom: 4px;
-    width: 6px;              /* match desktop thin width */
-    background: var(--bg);   /* desktop-like light track */
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    pointer-events: none;    /* don’t block scrolling */
-    opacity: 1;              /* always visible */
+    top: 0;                /* span the entire scroll area */
+    right: 2px;
+    bottom: 0;
+    width: 6px;
+    background: transparent; /* no visible track */
+    border: none;
+    pointer-events: none;
   }
 
-  /* Thumb */
+  /* Thumb: styled to match desktop thin bar */
   .custom-scrollbar .thumb {
     position: absolute;
     left: 0;
     width: 100%;
-    height: 24px;            /* JS will update; this is a fallback */
+    height: 24px;            /* JS updates actual height */
     background: var(--bg);
     border: 1px solid var(--border);
     border-radius: 999px;
-  }
-
-  /* Ensure content doesn't sit under the bar */
-  .bio-card .bio-scroll,
-  .publications-card .publications-scroll {
-    padding-right: 0.75rem;
   }
 }
 
