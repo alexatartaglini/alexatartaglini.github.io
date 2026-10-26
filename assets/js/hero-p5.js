@@ -2,16 +2,25 @@
 (function () {
   const sketch = (p) => {
     const MAX_BLUR_PX = 24;      // peak blur when cursor is at extreme left
+    const MIN_BLUR_PX = 8;       // blur floor, approached as cursor nears extreme right
     const BLUR_MODE = 'exp';   // 'cubic' or 'exp' (try both!)
     const EXP_K = 3;             // steeper falloff for 'exp' mode
 
     let canvasEl;                // we'll keep a handle to the <canvas> DOM node
 
+    // map progress (0..1, left → right) to a blur radius in px
+    function blurForProgress(nx) {
+      const falloff = (BLUR_MODE === 'cubic')
+        ? Math.pow(1 - nx, 3)      // strong near-left blur, drops off steeply to the right
+        : Math.exp(-EXP_K * nx);   // exponential falloff (even steeper feel)
+      return MIN_BLUR_PX + (MAX_BLUR_PX - MIN_BLUR_PX) * falloff;
+    }
+
     const PALETTES = [
+      ['#FFFFFF', '#D1D1D1'], // white / gray (default)
       ['#AFD0E3', '#E693F9'], // blue / pink
       ['#D9D7D7', '#FFE56B'], // light gray / yellow
       ['#C3F097', '#65DBA3'], // green / blue
-      ['#FFFFFF', '#D1D1D1'], // white / orange
       ['#DFC9FF', '#FF6363'], // purple / red
     ];
     
@@ -104,7 +113,7 @@
       winY = (window.innerHeight || 1) * 0.5;
 
       // update blur immediately so it responds during scroll
-      const blurPx = MAX_BLUR_PX * Math.exp(-EXP_K * pVal);
+      const blurPx = blurForProgress(pVal);
       if (canvasEl && inViewport(parentEl) && (isMobile)) {
         canvasEl.style.filter = `blur(${blurPx.toFixed(2)}px)`;
       }
@@ -314,14 +323,7 @@
       }
       */
 
-      let blurPx;
-      if (BLUR_MODE === 'cubic') {
-        // strong near-left blur, drops off steeply to the right
-        blurPx = MAX_BLUR_PX * Math.pow(1 - nx, 3);
-      } else {
-        // exponential falloff (even steeper feel)
-        blurPx = MAX_BLUR_PX * Math.exp(-EXP_K * nx);
-      }
+      const blurPx = blurForProgress(nx);
       // apply to the canvas element
       canvasEl.style.filter = `blur(${blurPx.toFixed(2)}px)`;
 
